@@ -5,36 +5,6 @@ networks:
     external: true
 
 services:
-        # cadvisor-1:
-        #    image: google/cadvisor:latest
-        #   volumes:
-        #    - /:/rootfs:ro
-        #    - /var/run:/var/run:rw
-        #    - /sys:/sys:ro
-        #    - /var/lib/docker:/var/lib/docker:ro
-        #    deploy:
-        #     placement:
-        #        constraints: [node.hostname == VM2]
-    #ports:
-    #- 8080:8080
-    #    networks:
-    #  - caliper-overlay
-    
-        #  cadvisor-2:
-        #    image: google/cadvisor:latest
-        #    volumes:
-        #   - /:/rootfs:ro
-        #   - /var/run:/var/run:rw
-        #  - /sys:/sys:ro
-        #    - /var/lib/docker:/var/lib/docker:ro
-        #    deploy:
-        #      placement:
-        #       constraints: [node.hostname == VM3]
-    #ports:
-    #- 8080:8080
-    #    networks:
-    #  - caliper-overlay
-
   cadvisor-1:
     image: google/cadvisor:latest
     volumes:
@@ -44,39 +14,41 @@ services:
     - /var/lib/docker:/var/lib/docker:ro
     deploy:
       placement:
-        constraints: [node.hostname == dappvm1]
+        constraints: [node.hostname == compute1]
+    #ports:
+    #- 8080:8080
+    networks:
+    - caliper-overlay
+  
+  cadvisor-2:
+    image: google/cadvisor:latest
+    volumes:
+    - /:/rootfs:ro
+    - /var/run:/var/run:rw
+    - /sys:/sys:ro
+    - /var/lib/docker:/var/lib/docker:ro
+    deploy:
+      placement:
+        constraints: [node.hostname == compute2]
     #ports:
     #- 8080:8080
     networks:
     - caliper-overlay
 
-      #  node-exporter-1:
-          #    image: prom/node-exporter
-          # volumes:
-          #  - /proc:/host/proc:ro
-          #    - /sys:/host/sys:ro
-          #  - /:/rootfs:ro
-          #    deploy:
-          #      placement:
-          #        constraints: [node.hostname == VM2]
+  cadvisor-3:
+    image: google/cadvisor:latest
+    volumes:
+    - /:/rootfs:ro
+    - /var/run:/var/run:rw
+    - /sys:/sys:ro
+    - /var/lib/docker:/var/lib/docker:ro
+    deploy:
+      placement:
+        constraints: [node.hostname == compute3]
     #ports:
-    #- 9100:9100
-    #    networks:
-    # - caliper-overlay
-
-      #  node-exporter-2:
-      #    image: prom/node-exporter
-      #   volumes:
-      #    - /proc:/host/proc:ro
-      #   - /sys:/host/sys:ro
-      #    - /:/rootfs:ro
-      #  deploy:
-      #      placement:
-      #    constraints: [node.hostname == VM3]
-    #ports:
-    #- 9100:9100
-    #    networks:
-    #   - caliper-overlay
+    #- 8080:8080
+    networks:
+    - caliper-overlay
 
   node-exporter-1:
     image: prom/node-exporter
@@ -86,7 +58,35 @@ services:
     - /:/rootfs:ro
     deploy:
       placement:
-        constraints: [node.hostname == dappvm1]
+        constraints: [node.hostname == compute1]
+    #ports:
+    #- 9100:9100
+    networks:
+    - caliper-overlay
+
+  node-exporter-2:
+    image: prom/node-exporter
+    volumes:
+    - /proc:/host/proc:ro
+    - /sys:/host/sys:ro
+    - /:/rootfs:ro
+    deploy:
+      placement:
+        constraints: [node.hostname == compute2]
+    #ports:
+    #- 9100:9100
+    networks:
+    - caliper-overlay
+
+  node-exporter-3:
+    image: prom/node-exporter
+    volumes:
+    - /proc:/host/proc:ro
+    - /sys:/host/sys:ro
+    - /:/rootfs:ro
+    deploy:
+      placement:
+        constraints: [node.hostname == compute3]
     #ports:
     #- 9100:9100
     networks:
